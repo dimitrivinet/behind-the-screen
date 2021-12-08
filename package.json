@@ -14,8 +14,12 @@
     "@mediapipe/camera_utils": "^0.3.1632432234",
     "@mediapipe/drawing_utils": "^0.3.1620248257",
     "@mediapipe/holistic": "^0.5.1635989137",
+    "@tensorflow-models/face-landmarks-detection": "0.0.1",
+    "@tensorflow/tfjs": "2.6.0",
+    "add": "^2.0.6",
     "core-js": "^3.15.1",
-    "nuxt": "^2.15.7"
+    "nuxt": "^2.15.7",
+    "yarn": "^1.22.17"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.14.7",

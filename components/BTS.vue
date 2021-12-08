@@ -6,7 +6,8 @@ export default Vue.extend({})
 
 <template>
   <div>
-      <Mediapipe/>
+      <!-- <Mediapipe/> -->
+      <Iris />
   </div>
 </template>
 

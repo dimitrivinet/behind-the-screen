@@ -21,7 +21,7 @@ import { drawConnectors, drawLandmarks } from '@mediapipe/drawing_utils'
 
 export default {
   name: 'HolisticModel',
-  data: function () {
+  data: () => {
     return {
       number: null,
       ctx: null,
