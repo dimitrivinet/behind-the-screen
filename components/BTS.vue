@@ -1,14 +1,30 @@
-<script setup lang="ts">
-import Vue from 'vue'
-
-export default Vue.extend({})
-</script>
-
 <template>
-  <div>
-      <!-- <Mediapipe/> -->
-      <Iris />
+  <div id="bts">
+    <HeaderBar />
+    <Main />
+    <!-- <Footer /> -->
   </div>
 </template>
 
-<style scoped></style>
+<script>
+export default {}
+</script>
+
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+.bts {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+}
+
+h1 {
+  margin: 0;
+  padding: 0;
+}
+</style>

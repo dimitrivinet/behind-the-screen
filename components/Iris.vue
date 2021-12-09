@@ -1,59 +1,50 @@
-<script>
-import {
-  load,
-  SupportedPackages,
-} from '@tensorflow-models/face-landmarks-detection'
-import '@tensorflow/tfjs-backend-webgl'
-import '@tensorflow/tfjs-backend-cpu'
-import { Camera } from '@mediapipe/camera_utils'
+<template>
+  <div class="container">
+    <video
+      ref="inputVideo"
+      class="hideVideo"
+      width="350"
+      height="255"
+      controls
+    ></video>
+    <!-- <button type="button" @click="toggleInferenceFlag()">
+      Toggle Inference
+    </button> -->
+  </div>
+</template>
 
-export default {
-  name: 'IrisDetection',
-  data: () => {
-    return {
-      run_inference: false,
-      video: null,
-      model: null,
-    }
-  },
-  computed: {
-    inputVideo() {
-      return this.$refs.input_video
-    },
-  },
+<script lang="ts">
+import { Component, Vue, Ref } from 'vue-property-decorator'
+import IrisRunner from '~/tools/iris'
+
+@Component({})
+export default class Iris extends Vue {
+  @Ref('toggleInference') readonly toggleInferenceButton!: HTMLButtonElement
+  @Ref('inputVideo') readonly inputVideo!: HTMLVideoElement
+
+  irisRunner: IrisRunner
+
+  constructor() {
+    super()
+    this.irisRunner = new IrisRunner()
+  }
+
   mounted() {
-    const toggleInferenceButton = this.$refs.toggle_inference
-    toggleInferenceButton.onclick = () => {
-      console.log("aaa")
-      console.log(this.run_inference)
-      this.run_inference = !this.run_inference
-    }
+    this.inputVideo.style.display = 'none'
+    this.irisRunner.start(this.inputVideo)
+  }
 
-    const camera = new Camera(this.inputVideo, {
-      onFrame: async () => {
-        if (this.run_inference) await this.run_frame({ image: this.inputVideo })
-      },
-      width: 1280,
-      height: 720,
-    })
-
-    load(SupportedPackages.mediapipeFacemesh).then((model) => {
-      this.model = model
-      camera.start()
-    })
-  },
-  methods: {
-    async run_frame(data) {
-      const faces = await this.model.estimateFaces({ input: data.image })
-      console.log(faces)
-    },
-  },
+  toggleInferenceFlag() {
+    this.irisRunner.toggleInferenceFlag()
+  }
 }
 </script>
 
-<template>
-  <div class="container">
-    <video ref="input_video" width="1%" height="1%"></video>
-    <button ref="toggle_inference" type="button">Toggle Inference</button>
-  </div>
-</template>
+<style scoped>
+.hideVideo {
+  display: block;
+  z-index: 999;
+  margin-top: 10px;
+  margin-left: 10px;
+}
+</style>

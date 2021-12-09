@@ -17,8 +17,11 @@
     "@tensorflow-models/face-landmarks-detection": "0.0.1",
     "@tensorflow/tfjs": "2.6.0",
     "add": "^2.0.6",
+    "babylonjs": "^4.2.0",
     "core-js": "^3.15.1",
     "nuxt": "^2.15.7",
+    "vue-class-component": "^7.2.6",
+    "vue-property-decorator": "^9.1.2",
     "yarn": "^1.22.17"
   },
   "devDependencies": {

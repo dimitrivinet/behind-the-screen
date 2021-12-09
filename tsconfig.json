@@ -25,7 +25,10 @@
     },
     "types": [
       "@nuxt/types",
-      "@types/node"
+      "@types/node",
+      "babylonjs",
+      // "babylonjs-gui",
+      // "babylonjs-materials"
     ]
   },
   "exclude": [

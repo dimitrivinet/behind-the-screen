@@ -2,8 +2,8 @@
   <div class="container">
     <video ref="input_video" width="1%" height="1%"></video>
     <canvas
-      class="output_canvas"
       ref="output_canvas"
+      class="outputCanvas"
       width=1300rem
       height=800rem
     ></canvas>
