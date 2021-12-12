@@ -5,11 +5,7 @@
   </div>
 </template>
 
-<script>
-export default {}
-</script>
-
-<style>
+<style scoped>
 .main {
   height: 95vh;
   margin: 0;

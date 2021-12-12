@@ -7,16 +7,27 @@
 <script lang="ts">
 import { Component, Vue, Ref } from 'vue-property-decorator'
 import BabylonManager from '~/tools/BabylonManager'
+import { EventBus } from '~/tools/EventBus'
 
 @Component({})
 export default class Scene extends Vue {
   @Ref('render_canvas') readonly renderCanvas!: HTMLCanvasElement
 
+  babylonManager: BabylonManager | undefined
+
   mounted() {
-    const babylonManager = new BabylonManager(this.renderCanvas)
-    babylonManager.start()
+    this.babylonManager = new BabylonManager(this.renderCanvas)
+    this.babylonManager.start()
+
+    EventBus.$on("move-camera", (axis: string, value: number) => {
+      this.babylonManager!.moveCamera(axis, value)
+    })
   }
 }
+
+EventBus.$on('change-scene', () => {
+  console.log('todo: show change scene menu')
+})
 </script>
 
 <style scoped>

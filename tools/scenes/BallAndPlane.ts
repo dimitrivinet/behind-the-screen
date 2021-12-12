@@ -8,16 +8,9 @@ import {
 } from 'babylonjs'
 
 // CreateScene function that creates and return the scene
-function createScene(engine: Engine, canvas: HTMLCanvasElement) {
+function createScene(engine: Engine) {
   // Create a basic BJS Scene object
   const scene = new Scene(engine)
-  // Create a FreeCamera, and set its position to {x: 0, y: 5, z: -10}
-  const camera = new FreeCamera('camera1', new Vector3(0, 5, -10), scene)
-
-  // Target the camera to scene origin
-  camera.setTarget(Vector3.Zero())
-  // Attach the camera to the canvas
-  camera.attachControl(canvas, false)
 
   // Create a basic light, aiming 0, 1, 0 - meaning, to the sky
   const light = new HemisphericLight('light1', new Vector3(0, 1, 0), scene)
