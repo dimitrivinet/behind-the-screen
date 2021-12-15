@@ -11,7 +11,9 @@
 </template>
 
 <script lang="ts">
+import Stats from 'stats.js'
 import { Component, Vue, Ref } from 'vue-property-decorator'
+
 import IrisRunner from '~/tools/Iris'
 import { EventBus } from '~/tools/EventBus'
 
@@ -20,6 +22,8 @@ export default class Iris extends Vue {
   @Ref('toggleInference') readonly toggleInferenceButton!: HTMLButtonElement
   @Ref('inputVideo') readonly inputVideo!: HTMLVideoElement
 
+  statsShown: boolean = false
+  stats: Stats
   irisRunner: IrisRunner
 
   showPerformance: Boolean = false
@@ -27,23 +31,25 @@ export default class Iris extends Vue {
 
   constructor() {
     super()
-    this.irisRunner = new IrisRunner()
+    this.stats = new Stats()
+    this.stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
+
+    EventBus.$on('show-performance', () => {
+      if (this.statsShown) document.body.removeChild(this.stats.dom)
+      else document.body.appendChild(this.stats.dom)
+
+      this.statsShown = !this.statsShown
+    })
+
+    this.irisRunner = new IrisRunner(this.stats)
 
     // setup events
     EventBus.$on('toggle-inference', () => {
       this.toggleInference()
     })
 
-    EventBus.$on('show-performance', () => {
-      this.showPerformance = !this.showPerformance
-    })
-
     EventBus.$on('show-webcam', () => {
       this.toggleShowWebcam()
-    })
-
-    EventBus.$on('calibrate', () => {
-      console.log('TODO: call function instead of toggling calibrate')
     })
   }
 

@@ -3,6 +3,8 @@ From https://playground.babylonjs.com/#LPTLZM
 */
 
 import * as BABYLON from 'babylonjs'
+import 'babylonjs-loaders'
+import 'recast-detour'
 
 function getRandomPos(navigationPlugin) {
   const radius = 9.5
@@ -95,7 +97,7 @@ function fishesPickupNewDestination(navigationPlugin, crowd, fishes, time) {
   }
 }
 
-function createScene(engine) {
+export function createScene(engine) {
   const scene = new BABYLON.Scene(engine)
   const navigationPlugin = new BABYLON.RecastJSPlugin()
   const fishes = []
@@ -116,21 +118,21 @@ function createScene(engine) {
   )
 
   // setup the main camera for the scene and give it control limits
-  const mainCam = new BABYLON.ArcRotateCamera(
-    'mainCam',
-    BABYLON.Tools.ToRadians(100),
-    BABYLON.Tools.ToRadians(85),
-    10,
-    new BABYLON.Vector3(-0.25, 1, 0),
-    scene
-  )
-  mainCam.layerMask = 1
-  mainCam.lowerRadiusLimit = 10
-  mainCam.upperRadiusLimit = 10
-  mainCam.lowerBetaLimit = BABYLON.Tools.ToRadians(85)
-  mainCam.upperBetaLimit = BABYLON.Tools.ToRadians(85)
+  // const mainCam = new BABYLON.ArcRotateCamera(
+  //   'mainCam',
+  //   BABYLON.Tools.ToRadians(100),
+  //   BABYLON.Tools.ToRadians(85),
+  //   10,
+  //   new BABYLON.Vector3(-0.25, 1, 0),
+  //   scene
+  // )
+  // mainCam.layerMask = 1
+  // mainCam.lowerRadiusLimit = 10
+  // mainCam.upperRadiusLimit = 10
+  // mainCam.lowerBetaLimit = BABYLON.Tools.ToRadians(85)
+  // mainCam.upperBetaLimit = BABYLON.Tools.ToRadians(85)
 
-  mainCam.attachControl(canvas, true)
+  // mainCam.attachControl(canvas, true)
 
   // setup the camera that will "record" the caustics pattern
   const textureCamera = new BABYLON.ArcRotateCamera(
@@ -507,5 +509,3 @@ function createScene(engine) {
 
   return scene
 }
-
-export default createScene

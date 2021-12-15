@@ -2,13 +2,12 @@ import {
   Engine,
   Scene,
   Vector3,
-  FreeCamera,
   HemisphericLight,
   Mesh,
 } from 'babylonjs'
 
 // CreateScene function that creates and return the scene
-function createScene(engine: Engine) {
+export function createScene(engine: Engine) {
   // Create a basic BJS Scene object
   const scene = new Scene(engine)
 
@@ -34,5 +33,3 @@ function createScene(engine: Engine) {
   // Return the created scene
   return scene
 }
-
-export default createScene

@@ -27,6 +27,7 @@
       "@nuxt/types",
       "@types/node",
       "babylonjs",
+      "babylonjs-materials",
       // "babylonjs-gui",
       // "babylonjs-materials"
     ]
