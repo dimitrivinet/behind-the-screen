@@ -24,7 +24,6 @@ export default class HeaderBar extends Vue {
   padding: 0 10rem;
 
   height: 5vh;
-  z-index: 100;
 
   display: flex;
   flex-direction: row;
@@ -33,6 +32,9 @@ export default class HeaderBar extends Vue {
 
   background-color: #434957;
   color: #E5E5E5;
+
+  position: relative;
+  z-index: 6;
 }
 
 h1 {

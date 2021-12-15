@@ -5,9 +5,10 @@
       <HeaderMenuItem item-name="Toggle Inference" :checkbox="true" event-name="toggle-inference" />
       <HeaderMenuItem item-name="Show Performance" :checkbox="true" event-name="show-performance" />
       <HeaderMenuItem item-name="Show Webcam" :checkbox="true" event-name="show-webcam" />
+      <HeaderMenuItem item-name="Hide Best Feature (why?)" :checkbox="true" event-name="hide-portal" />
+      <HeaderMenuItem item-name="Show Debug" :checkbox="true" event-name="show-debug" />
       <HeaderMenuItem item-name="Change Scene" :checkbox="false" event-name="change-scene" />
       <HeaderMenuItem item-name="Calibrate" :checkbox="false" event-name="calibrate" />
-      <HeaderMenuItem item-name="Show Debug" :checkbox="false" event-name="show-debug" />
     </nav>
   </div>
 </template>

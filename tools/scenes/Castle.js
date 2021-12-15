@@ -23,11 +23,14 @@ const createScene = function (engine) {
   // This creates a basic Babylon Scene object (non-mesh)
   const scene = new BABYLON.Scene(engine)
 
+  scene.clearColor = new BABYLON.Color3(0.35, 0.47, 0.56)
+
   // This creates our primary camera
   const camera = new BABYLON.FreeCamera('camera1', new BABYLON.Vector3(0, 5, 0), scene)
 
   // Load glTF scene.  Once loaded, begin to configure everything.
-  BABYLON.SceneLoader.Append('https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Sponza/glTF/', 'Sponza.gltf', scene, function (scene) {
+  // BABYLON.SceneLoader.Append('https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Sponza/glTF/', 'Sponza.gltf', scene, function (scene) {
+  BABYLON.SceneLoader.Append('/Sponza/', 'Sponza.gltf', scene, function (scene) {
     const pipCamera = new BABYLON.FreeCamera('pipCamera', new BABYLON.Vector3(0, 20, 0), scene)
     pipCamera.setTarget(BABYLON.Vector3.Zero())
 
@@ -64,7 +67,7 @@ const createScene = function (engine) {
     const light = new BABYLON.HemisphericLight('light', new BABYLON.Vector3(0, 1, 0), scene)
 
     // Default intensity is 1. Let's dim the light a small amount
-    light.intensity = 0.7
+    light.intensity = 1
 
     // For each part of the Sponza mesh, we want to increase the size and set its layer mask so that
     // it's visible to both cameras

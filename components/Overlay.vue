@@ -1,10 +1,32 @@
 <template>
-  <div class="portal-overlay">
-    <img src="~/static/portal_left.png" class="left" alt="" />
-    <img src="~/static/portal_right.png" class="right" alt="" /> -->
-    <img src="~/static/portal_middle.png" class="warp" alt="" />
+  <div v-show="showPortal" ref="portalOverlay" class="portal-overlay">
+    <img src="~/static/portal-left.png" class="left" alt="" />
+    <img src="~/static/portal-right.png" class="right" alt="" />
+    <div id="warpWrapper"><img src="portal-warp.png" class="warp" alt="" /></div>
   </div>
 </template>
+
+<script lang="ts">
+import { Component, Vue, Watch } from 'vue-property-decorator'
+import { EventBus } from '~/tools/EventBus'
+
+@Component({})
+export default class Overlay extends Vue {
+  @Watch("showPortal")
+  onshowPortalChanged() {
+    const portal = this.$refs.portalOverlay as HTMLElement
+    portal.style.display = this.showPortal ? 'flex' : 'none'
+  }
+
+  showPortal: boolean = true
+
+  created() {
+    EventBus.$on('hide-portal', () => {
+      this.showPortal = !this.showPortal
+    })
+  }
+}
+</script>
 
 <style scoped>
 .portal-overlay {
@@ -15,41 +37,68 @@
   align-items: center;
 
   width: 100%;
-  height: 100%;
-  z-index: 5;
+  height: calc(100% - 5vh);
+
+  position: fixed;
+  top: 5vh;
+
+  pointer-events: none;
+
+  background: transparent;
 }
 
 img {
-  position: fixed;
-
-  z-index: 5;
   height: 100%;
-  pointer-events: none;
+  position: fixed;
+  z-index: 5;
 }
 
 img.left {
-  top: 0px;
   left: 0px;
 }
 
 img.right {
-  top:0px;
   right: 0px;
 }
 
 img.warp {
-  z-index: 4;
+  z-index: -1;
   animation: warp;
   animation-iteration-count: infinite;
   animation-duration: 9s;
 }
 
+#warpWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: spin;
+  animation-iteration-count: infinite;
+  animation-duration: 180s;
+}
+
+@media screen and (orientation: landscape) {
+  img.warp {
+    width: 180vw;
+    height: auto;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(-360deg);
+  }
+}
 @keyframes warp {
   0% {
     margin-left: -5px;
     margin-top: -3px;
     filter: blur(2px);
-    transform: rotate(4deg);
+    transform: rotate(2deg);
   }
 
   12.5% {
@@ -75,7 +124,7 @@ img.warp {
     margin-left: -4px;
     margin-top: -2px;
     filter: blur(4px);
-    transform: rotate(3deg);
+    transform: rotate(1.5deg);
   }
 
   62.5% {
@@ -88,7 +137,7 @@ img.warp {
     margin-left: -4px;
     margin-top: 4px;
     filter: blur(6px);
-    transform: rotate(1deg);
+    transform: rotate(0.5deg);
   }
 
   87.5% {
@@ -101,7 +150,7 @@ img.warp {
     margin-left: -2px;
     margin-top: -3px;
     filter: blur(0px);
-    transform: rotate(4deg);
+    transform: rotate(2deg);
   }
 }
 </style>

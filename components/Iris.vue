@@ -23,14 +23,13 @@ export default class Iris extends Vue {
   @Ref('inputVideo') readonly inputVideo!: HTMLVideoElement
 
   statsShown: boolean = false
-  stats: Stats
-  irisRunner: IrisRunner
+  stats!: Stats
+  irisRunner!: IrisRunner
 
   showPerformance: Boolean = false
   showWebcam: Boolean = false
 
-  constructor() {
-    super()
+  created() {
     this.stats = new Stats()
     this.stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
 
