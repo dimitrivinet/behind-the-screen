@@ -19,7 +19,7 @@ import * as BABYLON from 'babylonjs'
  * https://doc.babylonjs.com/divingDeeper/importers/loadingFileTypes
  *
  */
-const createScene = function (engine) {
+const createScene = async function (engine) {
   // This creates a basic Babylon Scene object (non-mesh)
   const scene = new BABYLON.Scene(engine)
 
@@ -30,7 +30,8 @@ const createScene = function (engine) {
 
   // Load glTF scene.  Once loaded, begin to configure everything.
   // BABYLON.SceneLoader.Append('https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Sponza/glTF/', 'Sponza.gltf', scene, function (scene) {
-  BABYLON.SceneLoader.Append('/Sponza/', 'Sponza.gltf', scene, function (scene) {
+    await BABYLON.SceneLoader.AppendAsync('/Sponza/', 'Sponza.gltf', scene). then(() => {
+    console.log(scene)
     const pipCamera = new BABYLON.FreeCamera('pipCamera', new BABYLON.Vector3(0, 20, 0), scene)
     pipCamera.setTarget(BABYLON.Vector3.Zero())
 
@@ -73,16 +74,16 @@ const createScene = function (engine) {
     // it's visible to both cameras
     scene.meshes.forEach((mesh) => {
       mesh.scaling = new BABYLON.Vector3(3, 3, 3)
-      mesh.layerMask = 0x10000000 // Set layer mask so that meshes are visible to all cameras
+      mesh.layerMask = 0x10000000 // Set layer mask so that meshes are visible to all cameras*
     })
-
-    // Set camera to look down the hall and show face
-    camera.setTarget(new BABYLON.Vector3(1, 6, 0))
-
-    // Create a basic skybox
-    createSkyBox(scene)
+    return scene
   })
 
+  // Set camera to look down the hall and show face
+  camera.setTarget(new BABYLON.Vector3(1, 6, 0))
+
+  // Create a basic skybox
+  createSkyBox(scene)
   return scene
 }
 

@@ -1,7 +1,7 @@
 import * as BABYLON from 'babylonjs'
 // import 'babylonjs-loaders'
 
-// import { createScene as createSceneBall } from '~/tools/scenes/BallAndPlane'
+import { createScene as createSceneBall } from '~/tools/scenes/BallAndPlane'
 import { createScene as createSceneCubes } from '~/tools/scenes/Cubes.js'
 import { createScene as createSceneBottle } from '~/tools/scenes/Bottle.js'
 import { createScene as createSceneCastle } from '~/tools/scenes/Castle.js'
@@ -38,28 +38,15 @@ export class BabylonManager {
     this.scenes = []
     this.sceneIndex = 0
 
-    // const ball = createSceneBall(this.engine)
-    // this.scenes.push({
-    //   scene: ball,
-    //   camera: new BABYLON.FreeCamera('camera1', new BABYLON.Vector3(0, 5, -10), ball),
-    //   offsets: {
-    //     positionOffsetX: 0,
-    //     positionOffsetY: 5,
-    //     // rotationOffsetX: number = 0.4636476090008061
-    //     rotationOffsetX: 0.46,
-    //     rotationOffsetY: 0,
-    //   },
-    // })
-
-    const castle: BABYLON.Scene = createSceneCastle(this.engine)
+    const ball = createSceneBall(this.engine)
     this.scenes.push({
-      scene: castle,
-      camera: castle.activeCamera as BABYLON.FreeCamera,
+      scene: ball,
+      camera: new BABYLON.FreeCamera('camera1', new BABYLON.Vector3(0, 5, -10), ball),
       offsets: {
         positionOffsetX: 0,
-        positionOffsetY: 10,
-        rotationOffsetX: 0,
-        rotationOffsetY: 1.58,
+        positionOffsetY: 5,
+        rotationOffsetX: 0.46,
+        rotationOffsetY: 0,
       },
     })
 
@@ -94,13 +81,25 @@ export class BabylonManager {
         offsets: {
           positionOffsetX: 0,
           positionOffsetY: 5,
-          // rotationOffsetX: number = 0.4636476090008061
           rotationOffsetX: 0,
           rotationOffsetY: 0,
         },
       })
-
       console.log('loaded cubes')
+
+      // createSceneCastle(this.engine).then((castle: BABYLON.Scene) => {
+      //   this.scenes.push({
+      //     scene: castle,
+      //     camera: castle.activeCamera as BABYLON.FreeCamera,
+      //     offsets: {
+      //       positionOffsetX: 0,
+      //       positionOffsetY: 10,
+      //       rotationOffsetX: 0,
+      //       rotationOffsetY: 1.58,
+      //     },
+      //   })
+      //   console.log('loaded castle')
+      // })
 
       createSceneBottle(this.engine).then((bottle) => {
         this.scenes.push({
@@ -109,12 +108,11 @@ export class BabylonManager {
           offsets: {
             positionOffsetX: 0,
             positionOffsetY: 0.1,
-            // rotationOffsetX: number = 0.4636476090008061
             rotationOffsetX: 0,
             rotationOffsetY: 0,
           },
         })
-        console.log('loaded cubes')
+        console.log('loaded bottle')
       })
     })
   }
