@@ -4,14 +4,13 @@ export default {
 
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
-
   router: {
-    base: '/behind-the-screen/'
+    base: '/behind-the-screen/',
   },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'behind_the_screen',
+    title: 'Behind The Screen',
     htmlAttrs: {
       lang: 'en',
     },
