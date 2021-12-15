@@ -24,6 +24,7 @@ export default class HeaderBar extends Vue {
   padding: 0 10rem;
 
   height: 5vh;
+  z-index: 100;
 
   display: flex;
   flex-direction: row;

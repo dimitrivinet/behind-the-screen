@@ -5,6 +5,9 @@ import {
   SupportedPackages,
 } from '@tensorflow-models/face-landmarks-detection'
 import '@tensorflow/tfjs-backend-webgl'
+
+import { FaceDetection } from '@mediapipe/face_detection'
+
 import { Camera } from '@mediapipe/camera_utils'
 import { EventBus } from '~/tools/EventBus'
 import * as IrisMaths from '~/tools/IrisMaths'
@@ -14,12 +17,16 @@ interface InputData {
 }
 
 class IrisRunner {
+  inferenceFlag: boolean = false
+  iris: boolean = true
+
   stats: Stats
 
-  inferenceFlag: boolean = false
   model: FaceLandmarksPackage | null = null
   width: number
   height: number
+
+  faceDetection: FaceDetection
 
   constructor(stats: Stats, width = 1280, height = 720) {
     this.stats = stats
@@ -32,29 +39,49 @@ class IrisRunner {
       this.model = model
       // this.camera.start()
     })
+
+    this.faceDetection = new FaceDetection({
+      locateFile: (file) => {
+        return `https://cdn.jsdelivr.net/npm/@mediapipe/face_detection/${file}`
+      },
+    })
+    this.faceDetection.setOptions({
+      minDetectionConfidence: 0.5,
+    })
+
+    this.faceDetection.onResults((results) => {
+      this.processFaces(results)
+    })
   }
 
   start(inputVideo: HTMLVideoElement) {
     const camera = new Camera(inputVideo, {
       onFrame: async () => {
         this.stats.begin()
-        if (this.inferenceFlag) await this.runFrame({ image: inputVideo })
+        if (this.inferenceFlag) {
+          // console.log('running inference')
+          if (this.iris) {
+            if (!(this.model === null)) await this.runFrame({ image: inputVideo })
+          } else await this.faceDetection.send({ image: inputVideo })
+          // console.log('inference run')
+        }
         this.stats.end()
       },
       width: this.width,
       height: this.height,
     })
+
     camera.start()
   }
 
   async runFrame(data: InputData) {
-    if (this.model === null) return
-    const faces = await this.model.estimateFaces({ input: data.image })
+    const faces = await this.model!.estimateFaces({ input: data.image })
     this.processFaces(faces)
   }
 
   processFaces(faces: any) {
     // console.log(faces)
+
     if (faces.length === 0) return
 
     // const annotations = faces[0].annotations
@@ -73,7 +100,6 @@ class IrisRunner {
     // const toMoveRoll = noseAngle[1] * 10
     // const toMovePitch = -noseAngle[0]
     // console.log(toMoveRoll * 100, toMovePitch * 100)
-
 
     const toMovePitch = this.normalizeAnnotations(facePosition.horizontal.center, this.width, 5)
     const toMoveRoll = -this.normalizeAnnotations(facePosition.vertical.center, this.height, 5)

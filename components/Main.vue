@@ -1,5 +1,6 @@
 <template>
   <div class="main">
+    <Overlay />
     <Iris />
     <Scene />
   </div>

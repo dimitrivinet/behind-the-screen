@@ -15,6 +15,7 @@ export default class Scene extends Vue {
   @Ref('render_canvas') readonly renderCanvas!: HTMLCanvasElement
 
   babylonManager: BabylonManager | undefined
+  debugShown: boolean = false
 
   mounted() {
     this.babylonManager = new BabylonManager(this.renderCanvas)
@@ -30,6 +31,11 @@ export default class Scene extends Vue {
 
     EventBus.$on('change-scene', () => {
       this.babylonManager!.nextScene()
+    })
+
+    EventBus.$on('show-debug', () => {
+      this.babylonManager!.toggleDebug(this.debugShown)
+      this.debugShown = ! this.debugShown
     })
   }
 }

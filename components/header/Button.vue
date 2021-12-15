@@ -15,6 +15,8 @@ export default class Menu extends Vue {}
 .headerButton {
   height: 5rem;
   width: 5rem;
+
+  cursor: pointer;
 }
 
 img {

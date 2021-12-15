@@ -7,6 +7,7 @@
       <HeaderMenuItem item-name="Show Webcam" :checkbox="true" event-name="show-webcam" />
       <HeaderMenuItem item-name="Change Scene" :checkbox="false" event-name="change-scene" />
       <HeaderMenuItem item-name="Calibrate" :checkbox="false" event-name="calibrate" />
+      <HeaderMenuItem item-name="Show Debug" :checkbox="false" event-name="show-debug" />
     </nav>
   </div>
 </template>

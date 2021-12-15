@@ -15,6 +15,7 @@
     "@babylonjs/loaders": "^4.2.0",
     "@mediapipe/camera_utils": "^0.3.1632432234",
     "@mediapipe/drawing_utils": "^0.3.1620248257",
+    "@mediapipe/face_detection": "^0.4.1628005423",
     "@mediapipe/holistic": "^0.5.1635989137",
     "@tensorflow-models/face-landmarks-detection": "0.0.1",
     "@tensorflow/tfjs": "2.6.0",

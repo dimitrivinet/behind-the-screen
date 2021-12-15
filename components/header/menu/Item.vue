@@ -9,7 +9,7 @@
     />
     <label v-if="checkbox" :for="itemName">{{ itemName }}</label>
 
-    <h4 v-if="!checkbox" @click="emitEvent">{{ itemName }}</h4>
+    <span v-if="!checkbox" @click="emitEvent">{{ itemName }}</span>
   </div>
 </template>
 
@@ -40,11 +40,13 @@ export default class HeaderMenuItem extends Vue {
 }
 
 label,
-h4 {
+span {
   margin: 0.5rem 1rem;
   display: block;
 
   font-size: 2rem;
   font-weight: inherit;
+
+  cursor: pointer;
 }
 </style>

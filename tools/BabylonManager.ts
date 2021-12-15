@@ -1,13 +1,14 @@
-import { Engine, Scene, Vector3, FreeCamera, SceneLoader } from 'babylonjs'
+import * as BABYLON from 'babylonjs'
 // import 'babylonjs-loaders'
 
 import { createScene as createSceneBall } from '~/tools/scenes/BallAndPlane'
-// import { createScene as createSceneFish } from '~/tools/scenes/Fish'
 import { createScene as createSceneCubes } from '~/tools/scenes/Cubes.js'
 import { createScene as createSceneBottle } from '~/tools/scenes/Bottle.js'
+import { createScene as createSceneCastle } from '~/tools/scenes/Castle.js'
 
 interface SceneConfig {
-  scene: Scene
+  scene: BABYLON.Scene
+  camera: BABYLON.FreeCamera
   offsets: {
     positionOffsetX: number
     positionOffsetY: number
@@ -19,26 +20,41 @@ interface SceneConfig {
 
 export class BabylonManager {
   renderCanvas: HTMLCanvasElement
-  engine: Engine
-  scenes: Array<SceneConfig>
+  engine: BABYLON.Engine
+  scenes: SceneConfig[]
   sceneIndex: number
-  camera!: FreeCamera
+  camera!: BABYLON.FreeCamera
 
   constructor(renderCanvas: HTMLCanvasElement) {
     this.renderCanvas = renderCanvas
 
     // Load 3D engine
-    this.engine = new Engine(this.renderCanvas, true, {
+    this.engine = new BABYLON.Engine(this.renderCanvas, true, {
       preserveDrawingBuffer: true,
       stencil: true,
     })
     this.engine.setHardwareScalingLevel(1 / window.devicePixelRatio)
 
     this.scenes = []
+    this.sceneIndex = 0
 
     const ball = createSceneBall(this.engine)
     this.scenes.push({
       scene: ball,
+      camera: new BABYLON.FreeCamera('camera1', new BABYLON.Vector3(0, 5, -10), ball),
+      offsets: {
+        positionOffsetX: 0,
+        positionOffsetY: 5,
+        // rotationOffsetX: number = 0.4636476090008061
+        rotationOffsetX: 0.46,
+        rotationOffsetY: 0,
+      },
+    })
+
+    const cubes = createSceneCubes(this.engine)
+    this.scenes.push({
+      scene: cubes,
+      camera: new BABYLON.FreeCamera('camera1', new BABYLON.Vector3(0, 5, -10), cubes),
       offsets: {
         positionOffsetX: 0,
         positionOffsetY: 5,
@@ -47,44 +63,37 @@ export class BabylonManager {
         rotationOffsetY: 0,
       },
     })
-    this.sceneIndex = 0
 
-    this.camera = new FreeCamera(
-      'camera1',
-      new Vector3(0, 5, -10),
-      this.scenes[this.sceneIndex].scene
-    )
-    // this.camera.inputs.clear()
-    // console.log(this.camera.inputs)
-    this.camera.speed = 0.01
-    this.camera.inverseRotationSpeed = 0.01
-    this.camera.setTarget(Vector3.Zero())
-    this.camera.attachControl(this.renderCanvas, false)
-
-    const cubes = createSceneCubes(this.engine)
+    const castle: BABYLON.Scene = createSceneCastle(this.engine)
     this.scenes.push({
-      scene: cubes,
+      scene: castle,
+      camera: castle.activeCamera as BABYLON.FreeCamera,
       offsets: {
         positionOffsetX: 0,
-        positionOffsetY: 5,
-        // rotationOffsetX: number = 0.4636476090008061
+        positionOffsetY: 10,
         rotationOffsetX: 0,
-        rotationOffsetY: 0,
+        rotationOffsetY: -1.58,
       },
     })
 
     createSceneBottle(this.engine).then((bottle) => {
       this.scenes.push({
         scene: bottle,
+        camera: new BABYLON.FreeCamera('camera1', new BABYLON.Vector3(0, 5, -10), bottle),
         offsets: {
           positionOffsetX: 0,
-          positionOffsetY: 5,
+          positionOffsetY: 0.1,
           // rotationOffsetX: number = 0.4636476090008061
           rotationOffsetX: 0,
           rotationOffsetY: 0,
         },
       })
     })
+
+    this.camera = this.scenes[this.sceneIndex].camera
+    this.setupCamera()
+
+    console.log(this.scenes)
   }
 
   start() {
@@ -111,7 +120,7 @@ export class BabylonManager {
         break
 
       case 'y':
-        this.camera.position.y = value + this.scenes[this.sceneIndex].offsets.positionOffsetX
+        this.camera.position.y = value + this.scenes[this.sceneIndex].offsets.positionOffsetY
         break
 
       case 'z':
@@ -141,6 +150,10 @@ export class BabylonManager {
     this.scenes[this.sceneIndex].scene.debugLayer.hide()
   }
 
+  toggleDebug(isDebugShown: boolean): void {
+    isDebugShown ? this.hideDebug() : this.showDebug()
+  }
+
   calibrate(): void {
     // position
     this.scenes[this.sceneIndex].offsets.positionOffsetX = this.camera.position.x
@@ -151,24 +164,26 @@ export class BabylonManager {
     this.scenes[this.sceneIndex].offsets.rotationOffsetY = this.camera.rotation.y
 
     console.log('calibrated')
+    console.log(this.scenes[this.sceneIndex].offsets)
   }
 
   nextScene(): void {
     this.sceneIndex += 1
     this.sceneIndex = this.sceneIndex % this.scenes.length
 
-    this.camera = new FreeCamera('camera1', new Vector3(0, 5, -10), this.scenes[this.sceneIndex].scene)
-    // this.camera.inputs.clear()
-    // console.log(this.camera.inputs)
+    this.camera = this.scenes[this.sceneIndex].camera
+    this.setupCamera()
+  }
+
+  setupCamera(): void {
     this.camera.speed = 0.01
     this.camera.inverseRotationSpeed = 0.01
-    this.camera.setTarget(Vector3.Zero())
+    this.camera.setTarget(BABYLON.Vector3.Zero())
     this.camera.attachControl(this.renderCanvas, false)
 
     this.camera.position.x = this.scenes[this.sceneIndex].offsets.positionOffsetX
-    this.camera.position.y = this.scenes[this.sceneIndex].offsets.positionOffsetX
-    this.camera.rotation.x = this.scenes[this.sceneIndex].offsets.positionOffsetX
-    this.camera.rotation.y = this.scenes[this.sceneIndex].offsets.positionOffsetX
-
+    this.camera.position.y = this.scenes[this.sceneIndex].offsets.positionOffsetY
+    this.camera.rotation.x = this.scenes[this.sceneIndex].offsets.rotationOffsetX
+    this.camera.rotation.y = this.scenes[this.sceneIndex].offsets.rotationOffsetY
   }
 }
