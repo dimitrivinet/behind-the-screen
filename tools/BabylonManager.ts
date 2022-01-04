@@ -1,5 +1,4 @@
 import * as BABYLON from 'babylonjs'
-// import 'babylonjs-loaders'
 
 import { createScene as createSceneBall } from '~/tools/scenes/BallAndPlane'
 import { createScene as createSceneCubes } from '~/tools/scenes/Cubes.js'
@@ -12,7 +11,6 @@ interface SceneConfig {
   offsets: {
     positionOffsetX: number
     positionOffsetY: number
-    // rotationOffsetX: number = 0.4636476090008061
     rotationOffsetX: number
     rotationOffsetY: number
   }
@@ -28,7 +26,6 @@ export class BabylonManager {
   constructor(renderCanvas: HTMLCanvasElement) {
     this.renderCanvas = renderCanvas
 
-    // Load 3D engine
     this.engine = new BABYLON.Engine(this.renderCanvas, true, {
       preserveDrawingBuffer: true,
       stencil: true,
@@ -59,13 +56,10 @@ export class BabylonManager {
   }
 
   start() {
-    // run the render loop
-    // const scene = this.scene
     this.engine.runRenderLoop(() => {
       this.scenes[this.sceneIndex].scene.render()
     })
 
-    // the canvas/window resize event handler
     const engine = this.engine
     window.addEventListener('resize', function () {
       engine.resize()
@@ -118,9 +112,6 @@ export class BabylonManager {
   }
 
   moveCamera(axis: string, value: number) {
-    // console.log(`position: ${this.camera.position}`)
-    // console.log(`rotation: ${this.camera.rotation}`)
-
     switch (axis) {
       case 'x':
         this.camera.position.x = value + this.scenes[this.sceneIndex].offsets.positionOffsetX

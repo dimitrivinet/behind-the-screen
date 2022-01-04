@@ -6,7 +6,7 @@ import {
 } from '@tensorflow-models/face-landmarks-detection'
 import '@tensorflow/tfjs-backend-webgl'
 
-import { FaceDetection } from '@mediapipe/face_detection'
+// import { FaceDetection } from '@mediapipe/face_detection'
 
 import { Camera } from '@mediapipe/camera_utils'
 import { EventBus } from '~/tools/EventBus'
@@ -18,7 +18,6 @@ interface InputData {
 
 class IrisRunner {
   inferenceFlag: boolean = false
-  iris: boolean = true
 
   stats: Stats
 
@@ -26,7 +25,7 @@ class IrisRunner {
   width: number
   height: number
 
-  faceDetection: FaceDetection
+  // faceDetection: FaceDetection
 
   constructor(stats: Stats, width = 1280, height = 720) {
     this.stats = stats
@@ -37,21 +36,20 @@ class IrisRunner {
     // load model
     load(SupportedPackages.mediapipeFacemesh).then((model) => {
       this.model = model
-      // this.camera.start()
     })
 
-    this.faceDetection = new FaceDetection({
-      locateFile: (file) => {
-        return `https://cdn.jsdelivr.net/npm/@mediapipe/face_detection/${file}`
-      },
-    })
-    this.faceDetection.setOptions({
-      minDetectionConfidence: 0.5,
-    })
+    // this.faceDetection = new FaceDetection({
+    //   locateFile: (file) => {
+    //     return `https://cdn.jsdelivr.net/npm/@mediapipe/face_detection/${file}`
+    //   },
+    // })
+    // this.faceDetection.setOptions({
+    //   minDetectionConfidence: 0.5,
+    // })
 
-    this.faceDetection.onResults((results) => {
-      this.processFaces(results)
-    })
+    // this.faceDetection.onResults((results) => {
+    //   this.processFaces(results)
+    // })
   }
 
   start(inputVideo: HTMLVideoElement) {
@@ -59,12 +57,9 @@ class IrisRunner {
       onFrame: async () => {
         this.stats.begin()
         if (this.inferenceFlag) {
-          // console.log('running inference')
-          if (this.iris) {
             if (!(this.model === null)) await this.runFrame({ image: inputVideo })
-          } else await this.faceDetection.send({ image: inputVideo })
-          // console.log('inference run')
-        }
+            // await this.faceDetection.send({ image: inputVideo })
+          }
         this.stats.end()
       },
       width: this.width,
@@ -80,26 +75,12 @@ class IrisRunner {
   }
 
   processFaces(faces: any) {
-    // console.log(faces)
-
     if (faces.length === 0) return
 
     // const annotations = faces[0].annotations
     const bbox = faces[0].boundingBox
 
     const facePosition = IrisMaths.faceCenter(bbox)
-
-    // const toMoveX = this.normalizeAnnotations(facePosition.horizontal.center, this.width, 0.25)
-    // const toMoveY = this.normalizeAnnotations(facePosition.vertical.center, this.height, 0.25)
-
-    // const noseAngle = IrisMaths.noseAngle(facePosition, [
-    //   annotations.noseTip[0][0],
-    //   annotations.noseTip[0][1],
-    // ])
-
-    // const toMoveRoll = noseAngle[1] * 10
-    // const toMovePitch = -noseAngle[0]
-    // console.log(toMoveRoll * 100, toMovePitch * 100)
 
     const toMovePitch = this.normalizeAnnotations(facePosition.horizontal.center, this.width, 5)
     const toMoveRoll = -this.normalizeAnnotations(facePosition.vertical.center, this.height, 5)

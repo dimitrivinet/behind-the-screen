@@ -5,6 +5,7 @@
       :id="itemName"
       type="checkbox"
       :name="itemName"
+      :checked="isChecked"
       @click="emitEvent"
     />
     <label v-if="checkbox" :for="itemName">{{ itemName }}</label>
@@ -23,7 +24,10 @@ export default class HeaderMenuItem extends Vue {
   @Prop(String) readonly eventName: string | undefined
   @Prop(Boolean) readonly checkbox: boolean | undefined
 
+  isChecked: boolean = false
+
   emitEvent() {
+    if (this.checkbox) this.isChecked = !this.isChecked
     EventBus.$emit(this.eventName || '')
   }
 }
